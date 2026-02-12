@@ -1,0 +1,106 @@
+{
+  "expectation_suite_name": "transactions_quality_suite",
+  "ge_cloud_id": null,
+  "expectations": [
+    {
+      "expectation_type": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "min_value": 50000,
+        "max_value": 5000000
+      },
+      "meta": {
+        "notes": "거래 테이블은 최소 5만건 이상이어야 함"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "transaction_id"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "transaction_id"
+      },
+      "meta": {
+        "notes": "거래 ID는 고유해야 함"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "user_id"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "transaction_type",
+        "value_set": ["transfer", "qr_payment", "charge", "withdraw"]
+      },
+      "meta": {
+        "notes": "거래 유형은 4가지만 허용"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "amount",
+        "min_value": 1,
+        "max_value": 100000000
+      },
+      "meta": {
+        "notes": "금액은 1원 이상, 1억 이하"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "fee",
+        "min_value": 0,
+        "max_value": 10000
+      },
+      "meta": {
+        "notes": "수수료는 0원 이상, 1만원 이하"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "status",
+        "value_set": ["completed", "failed", "pending", "cancelled"]
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "currency",
+        "value_set": ["KRW"]
+      },
+      "meta": {
+        "notes": "현재 KRW만 지원"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "created_at"
+      }
+    },
+    {
+      "expectation_type": "expect_column_pair_values_a_to_be_greater_than_b",
+      "kwargs": {
+        "column_A": "amount",
+        "column_B": "fee",
+        "or_equal": true
+      },
+      "meta": {
+        "notes": "금액은 항상 수수료 이상이어야 함"
+      }
+    }
+  ],
+  "meta": {
+    "great_expectations_version": "0.18.8"
+  }
+}

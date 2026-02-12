@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+data/
+*.duckdb
+*.duckdb.wal
+07_data_quality/reports/
+07_data_quality/great_expectations/uncommitted/
+04_dbt_mart/target/
+04_dbt_mart/dbt_packages/
+04_dbt_mart/logs/
+06_tableau_dashboard/exports/*.csv
+.DS_Store
+*.twbx

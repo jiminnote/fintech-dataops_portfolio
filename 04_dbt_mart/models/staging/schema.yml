@@ -1,0 +1,35 @@
+version: 2
+
+sources:
+  - name: raw
+    description: "QuickPay 원본 데이터"
+    tables:
+      - name: events
+        description: "이벤트 로그 (앱 + 서버)"
+        columns:
+          - name: event_id
+            description: "이벤트 고유 ID"
+            tests:
+              - not_null
+          - name: event_name
+            description: "이벤트명"
+            tests:
+              - not_null
+
+      - name: transactions
+        description: "거래 레코드 (서버)"
+        columns:
+          - name: transaction_id
+            description: "거래 고유 ID"
+            tests:
+              - not_null
+              - unique
+
+      - name: users
+        description: "사용자 마스터"
+        columns:
+          - name: user_id
+            description: "사용자 ID"
+            tests:
+              - not_null
+              - unique

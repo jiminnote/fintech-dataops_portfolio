@@ -1,0 +1,7 @@
+quickpay:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: '../data/quickpay.duckdb'
+      threads: 4

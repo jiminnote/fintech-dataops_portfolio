@@ -1,0 +1,118 @@
+{
+  "expectation_suite_name": "events_quality_suite",
+  "ge_cloud_id": null,
+  "expectations": [
+    {
+      "expectation_type": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "min_value": 100000,
+        "max_value": 10000000
+      },
+      "meta": {
+        "notes": "이벤트 테이블은 최소 10만건 이상이어야 함"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "event_id"
+      },
+      "meta": {
+        "notes": "event_id는 필수 필드"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "event_id"
+      },
+      "meta": {
+        "notes": "event_id는 고유해야 함 (중복 이벤트 방지)"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "event_name"
+      },
+      "meta": {
+        "notes": "event_name은 필수 필드"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "event_name",
+        "value_set": [
+          "auth_signup_started", "auth_signup_submitted", "auth_signup_completed",
+          "auth_login_attempted", "auth_login_completed", "auth_identity_verified",
+          "payment_transfer_started", "payment_transfer_amount_entered",
+          "payment_transfer_confirmed", "payment_transfer_completed", "payment_transfer_failed",
+          "payment_charge_completed", "payment_withdraw_completed",
+          "payment_qr_scanned", "payment_qr_completed",
+          "product_list_viewed", "product_detail_viewed", "product_compared",
+          "product_applied", "product_application_completed",
+          "screen_viewed", "screen_exited", "screen_tab_clicked",
+          "screen_banner_clicked", "screen_search_performed",
+          "system_error_occurred", "system_push_received", "system_push_clicked"
+        ]
+      },
+      "meta": {
+        "notes": "event_name은 택소노미에 정의된 값만 허용"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "event_timestamp"
+      },
+      "meta": {
+        "notes": "타임스탬프는 필수"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "platform",
+        "value_set": ["ios", "android", "web"]
+      },
+      "meta": {
+        "notes": "플랫폼은 ios/android/web만 허용"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_match_regex",
+      "kwargs": {
+        "column": "app_version",
+        "regex": "^\\d+\\.\\d+\\.\\d+$"
+      },
+      "meta": {
+        "notes": "앱 버전은 Semantic Versioning 형식이어야 함"
+      }
+    },
+    {
+      "expectation_type": "expect_column_proportion_of_unique_values_to_be_between",
+      "kwargs": {
+        "column": "user_id",
+        "min_value": 0.001,
+        "max_value": 1.0
+      },
+      "meta": {
+        "notes": "user_id의 다양성 확인 (단일 사용자만 있으면 안됨)"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "session_id",
+        "mostly": 0.99
+      },
+      "meta": {
+        "notes": "session_id 99% 이상 존재해야 함"
+      }
+    }
+  ],
+  "meta": {
+    "great_expectations_version": "0.18.8"
+  }
+}

@@ -1,0 +1,110 @@
+[
+  {
+    "event_id": "550e8400-e29b-41d4-a716-446655440001",
+    "event_name": "auth_signup_completed",
+    "event_timestamp": "2026-02-12T09:15:30.123Z",
+    "received_at": "2026-02-12T09:15:30.456Z",
+    "user_id": "usr_a1b2c3d4",
+    "session_id": "sess_x1y2z3",
+    "device_id": "dev_m1n2o3",
+    "platform": "ios",
+    "app_version": "3.2.1",
+    "os_version": "iOS 17.2",
+    "device_model": "iPhone 15 Pro",
+    "event_properties": {
+      "signup_method": "phone",
+      "referrer": "friend_invite",
+      "referral_code": "REF_TOSS2026",
+      "marketing_channel": "instagram",
+      "step": 5,
+      "total_steps": 5
+    }
+  },
+  {
+    "event_id": "550e8400-e29b-41d4-a716-446655440002",
+    "event_name": "payment_transfer_completed",
+    "event_timestamp": "2026-02-12T10:23:45.789Z",
+    "received_at": "2026-02-12T10:23:46.012Z",
+    "user_id": "usr_a1b2c3d4",
+    "session_id": "sess_x1y2z3",
+    "device_id": "dev_m1n2o3",
+    "platform": "ios",
+    "app_version": "3.2.1",
+    "os_version": "iOS 17.2",
+    "device_model": "iPhone 15 Pro",
+    "event_properties": {
+      "amount": 50000,
+      "currency": "KRW",
+      "transfer_type": "instant",
+      "recipient_type": "contact",
+      "fee": 0,
+      "bank_code": "088",
+      "is_first_transfer": false,
+      "error_code": null,
+      "error_message": null,
+      "latency_ms": 342
+    }
+  },
+  {
+    "event_id": "550e8400-e29b-41d4-a716-446655440003",
+    "event_name": "screen_viewed",
+    "event_timestamp": "2026-02-12T10:20:00.000Z",
+    "received_at": "2026-02-12T10:20:00.234Z",
+    "user_id": "usr_a1b2c3d4",
+    "session_id": "sess_x1y2z3",
+    "device_id": "dev_m1n2o3",
+    "platform": "ios",
+    "app_version": "3.2.1",
+    "os_version": "iOS 17.2",
+    "device_model": "iPhone 15 Pro",
+    "event_properties": {
+      "screen_name": "transfer_home",
+      "screen_class": "TransferViewController",
+      "previous_screen": "home",
+      "referrer": null,
+      "load_time_ms": 180
+    }
+  },
+  {
+    "event_id": "550e8400-e29b-41d4-a716-446655440004",
+    "event_name": "payment_qr_completed",
+    "event_timestamp": "2026-02-12T12:45:10.555Z",
+    "received_at": "2026-02-12T12:45:10.788Z",
+    "user_id": "usr_e5f6g7h8",
+    "session_id": "sess_a9b8c7",
+    "device_id": "dev_p4q5r6",
+    "platform": "android",
+    "app_version": "3.2.0",
+    "os_version": "Android 14",
+    "device_model": "Galaxy S24 Ultra",
+    "event_properties": {
+      "amount": 6500,
+      "merchant_id": "mrc_starbucks_001",
+      "merchant_name": "스타벅스 강남역점",
+      "merchant_category": "cafe",
+      "payment_method": "balance",
+      "discount_amount": 500,
+      "point_earned": 65
+    }
+  },
+  {
+    "event_id": "550e8400-e29b-41d4-a716-446655440005",
+    "event_name": "system_error_occurred",
+    "event_timestamp": "2026-02-12T14:00:22.111Z",
+    "received_at": "2026-02-12T14:00:22.333Z",
+    "user_id": "usr_i9j0k1l2",
+    "session_id": "sess_d6e5f4",
+    "device_id": "dev_s7t8u9",
+    "platform": "android",
+    "app_version": "3.1.9",
+    "os_version": "Android 13",
+    "device_model": "Pixel 8",
+    "event_properties": {
+      "error_code": "TRF_TIMEOUT_001",
+      "error_type": "network",
+      "error_message": "송금 처리 시간 초과",
+      "screen_name": "transfer_confirm",
+      "retry_count": 2
+    }
+  }
+]
