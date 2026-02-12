@@ -1,0 +1,2481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuickPay DataOps Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* ═══════════════════════════════════════════════════════════
+           CSS CUSTOM PROPERTIES
+           ═══════════════════════════════════════════════════════════ */
+        :root {
+            --primary: #6366F1;
+            --primary-light: #818CF8;
+            --primary-dark: #4F46E5;
+            --accent: #06B6D4;
+            --accent-light: #22D3EE;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --bg: #0F172A;
+            --bg-card: #1E293B;
+            --bg-card-hover: #334155;
+            --bg-code: #0D1117;
+            --text: #F8FAFC;
+            --text-muted: #94A3B8;
+            --text-dim: #64748B;
+            --border: #334155;
+            --gradient-1: linear-gradient(135deg, #6366F1, #06B6D4);
+            --gradient-2: linear-gradient(135deg, #F59E0B, #EF4444);
+            --gradient-3: linear-gradient(135deg, #10B981, #06B6D4);
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -2px rgba(0,0,0,0.3);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -4px rgba(0,0,0,0.3);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RESET & BASE
+           ═══════════════════════════════════════════════════════════ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        ::selection { background: var(--primary); color: white; }
+
+        a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--accent-light); }
+
+        /* ═══════════════════════════════════════════════════════════
+           ANIMATED BACKGROUND
+           ═══════════════════════════════════════════════════════════ */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background-image:
+                radial-gradient(circle at 25% 25%, rgba(99,102,241,0.08) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(6,182,212,0.06) 0%, transparent 50%);
+        }
+
+        .bg-grid::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           NAVIGATION
+           ═══════════════════════════════════════════════════════════ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            transition: all 0.3s;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .nav-logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-logo i { -webkit-text-fill-color: var(--primary); font-size: 1.4rem; }
+
+        .nav-links { display: flex; gap: 0.25rem; }
+
+        .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.4rem 0.9rem;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text);
+            background: rgba(99,102,241,0.15);
+        }
+
+        .nav-hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           HERO SECTION
+           ═══════════════════════════════════════════════════════════ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(99,102,241,0.12);
+            border: 1px solid rgba(99,102,241,0.3);
+            padding: 0.4rem 1.2rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--primary-light);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease;
+        }
+
+        .hero-badge i { font-size: 0.75rem; }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease 0.1s both;
+        }
+
+        .hero h1 .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 680px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.8;
+            animation: fadeInUp 0.6s ease 0.2s both;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.6s ease 0.3s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99,102,241,0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99,102,241,0.5);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-card-hover);
+            color: var(--text);
+            transform: translateY(-2px);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           HERO STATS
+           ═══════════════════════════════════════════════════════════ */
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 4rem;
+            animation: fadeInUp 0.6s ease 0.4s both;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(99,102,241,0.15);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           SECTIONS
+           ═══════════════════════════════════════════════════════════ */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           ARCHITECTURE SECTION
+           ═══════════════════════════════════════════════════════════ */
+        .arch-pipeline {
+            display: flex;
+            align-items: stretch;
+            gap: 0;
+            overflow-x: auto;
+            padding: 2rem 0;
+            position: relative;
+        }
+
+        .arch-step {
+            flex: 1;
+            min-width: 170px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .arch-step-inner {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            width: 100%;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+        }
+
+        .arch-step-inner:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(99,102,241,0.15);
+        }
+
+        .arch-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.75rem;
+            font-size: 1.3rem;
+        }
+
+        .arch-step-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .arch-step-tech {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .arch-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           FEATURE CARDS
+           ═══════════════════════════════════════════════════════════ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(99,102,241,0.4);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .feature-header {
+            padding: 2rem 2rem 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1.25rem;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature-meta { flex: 1; }
+
+        .feature-number {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-dim);
+            margin-bottom: 0.25rem;
+        }
+
+        .feature-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .feature-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            line-height: 1.7;
+        }
+
+        .feature-body { padding: 0 2rem 2rem; }
+
+        .feature-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: rgba(99,102,241,0.06);
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(99,102,241,0.1);
+        }
+
+        .highlight-icon {
+            color: var(--success);
+            font-size: 0.85rem;
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        .highlight-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .highlight-text strong { color: var(--text); }
+
+        /* ═══════════════════════════════════════════════════════════
+           CODE BLOCKS
+           ═══════════════════════════════════════════════════════════ */
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.6rem 1rem;
+            background: rgba(255,255,255,0.03);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .code-dots span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .code-dots span:nth-child(1) { background: #EF4444; }
+        .code-dots span:nth-child(2) { background: #F59E0B; }
+        .code-dots span:nth-child(3) { background: #10B981; }
+
+        .code-filename {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .code-content {
+            padding: 1.25rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            line-height: 1.8;
+            color: #E2E8F0;
+        }
+
+        .code-content pre {
+            margin: 0;
+            white-space: pre;
+        }
+
+        /* Syntax highlighting */
+        .kw { color: #C084FC; }
+        .fn { color: #67E8F9; }
+        .str { color: #86EFAC; }
+        .cm { color: #64748B; font-style: italic; }
+        .num { color: #FCD34D; }
+        .op { color: #94A3B8; }
+        .type { color: #F472B6; }
+
+        /* ═══════════════════════════════════════════════════════════
+           DAG VISUALIZATION
+           ═══════════════════════════════════════════════════════════ */
+        .dag-visual {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 2rem;
+            margin-top: 1rem;
+            overflow-x: auto;
+        }
+
+        .dag-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dag-node {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+            border: 1px solid;
+        }
+
+        .dag-node.source { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.4); color: #FBBF24; }
+        .dag-node.staging { background: rgba(6,182,212,0.15); border-color: rgba(6,182,212,0.4); color: #22D3EE; }
+        .dag-node.intermediate { background: rgba(139,92,246,0.15); border-color: rgba(139,92,246,0.4); color: #A78BFA; }
+        .dag-node.mart { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.4); color: #34D399; }
+
+        .dag-arrow-h {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .dag-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           LINEAGE MAP (3-column)
+           ═══════════════════════════════════════════════════════════ */
+        .lineage-map {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr auto 1fr;
+            gap: 0.5rem 0;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .lineage-col {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .lineage-arrow-col {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            padding: 0 0.5rem;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           AIRFLOW DAG
+           ═══════════════════════════════════════════════════════════ */
+        .airflow-dag {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            padding: 1.5rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-top: 1rem;
+            overflow-x: auto;
+        }
+
+        .airflow-node {
+            padding: 0.65rem 1rem;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .airflow-node.success {
+            background: rgba(16,185,129,0.15);
+            border: 1px solid rgba(16,185,129,0.4);
+            color: #34D399;
+        }
+
+        .airflow-node.branch {
+            background: rgba(245,158,11,0.15);
+            border: 1px solid rgba(245,158,11,0.4);
+            color: #FBBF24;
+        }
+
+        .airflow-node .node-status {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            font-size: 0.7rem;
+        }
+
+        .airflow-arrow { color: var(--text-dim); font-size: 0.9rem; }
+
+        /* ═══════════════════════════════════════════════════════════
+           QUALITY DASHBOARD MOCKUP
+           ═══════════════════════════════════════════════════════════ */
+        .quality-dashboard {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .quality-header-row {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .quality-score {
+            text-align: center;
+        }
+
+        .quality-score-ring {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 6px solid var(--border);
+            border-top-color: var(--success);
+            border-right-color: var(--success);
+            border-bottom-color: var(--success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            position: relative;
+        }
+
+        .quality-score-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--success);
+        }
+
+        .quality-score-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .quality-stats {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .quality-stat {
+            text-align: center;
+        }
+
+        .quality-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .quality-stat-value.pass { color: var(--success); }
+        .quality-stat-value.fail { color: var(--danger); }
+        .quality-stat-value.total { color: var(--text); }
+
+        .quality-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .quality-checks {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .quality-check-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .quality-check-item .status-icon { flex-shrink: 0; }
+
+        /* ═══════════════════════════════════════════════════════════
+           SLACK ALERT MOCKUP
+           ═══════════════════════════════════════════════════════════ */
+        .slack-mockup {
+            background: #1A1D21;
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            margin-top: 1rem;
+            border: 1px solid #333;
+            max-width: 520px;
+        }
+
+        .slack-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .slack-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        .slack-username {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #D1D2D3;
+        }
+
+        .slack-tag {
+            font-size: 0.6rem;
+            background: rgba(255,255,255,0.08);
+            padding: 0.1rem 0.35rem;
+            border-radius: 3px;
+            color: #9FA5A8;
+        }
+
+        .slack-time {
+            font-size: 0.7rem;
+            color: #616061;
+        }
+
+        .slack-body {
+            padding-left: 2.5rem;
+        }
+
+        .slack-attachment {
+            border-left: 4px solid;
+            padding: 0.75rem 1rem;
+            border-radius: 0 4px 4px 0;
+            background: rgba(255,255,255,0.03);
+            margin-top: 0.5rem;
+        }
+
+        .slack-attachment.success { border-color: #1CB875; }
+        .slack-attachment.danger { border-color: #E01E5A; }
+
+        .slack-attachment-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #D1D2D3;
+            margin-bottom: 0.5rem;
+        }
+
+        .slack-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+        }
+
+        .slack-field-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #9FA5A8;
+        }
+
+        .slack-field-value {
+            font-size: 0.8rem;
+            color: #D1D2D3;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           DASHBOARD MOCKUP
+           ═══════════════════════════════════════════════════════════ */
+        .dashboard-mockup {
+            background: #FAFBFC;
+            border-radius: var(--radius-sm);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border: 1px solid #E2E8F0;
+        }
+
+        .dashboard-title-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #E2E8F0;
+        }
+
+        .dashboard-title-text {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #1E293B;
+        }
+
+        .dashboard-filter-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .dashboard-filter {
+            padding: 0.3rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            border: 1px solid #CBD5E1;
+            background: white;
+            color: #475569;
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .kpi-card-mock {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            border: 1px solid #E2E8F0;
+        }
+
+        .kpi-card-mock .kpi-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1E293B;
+        }
+
+        .kpi-card-mock .kpi-label {
+            font-size: 0.65rem;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .kpi-card-mock .kpi-change {
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .kpi-change.up { color: #10B981; }
+        .kpi-change.down { color: #EF4444; }
+
+        .chart-area {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 1rem;
+        }
+
+        .chart-box {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            border: 1px solid #E2E8F0;
+        }
+
+        .chart-box-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 0.75rem;
+        }
+
+        .mini-chart {
+            height: 120px;
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            padding: 0.5rem 0;
+        }
+
+        .mini-bar {
+            flex: 1;
+            border-radius: 3px 3px 0 0;
+            transition: all 0.3s;
+            min-height: 8px;
+        }
+
+        .mini-bar:hover { opacity: 0.8; }
+
+        .funnel-visual {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .funnel-bar {
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 0.75rem;
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: white;
+            position: relative;
+        }
+
+        .funnel-pct {
+            position: absolute;
+            right: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Retention heatmap */
+        .heatmap { margin-top: 0.5rem; }
+
+        .heatmap-row {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 2px;
+        }
+
+        .heatmap-cell {
+            width: 44px;
+            height: 26px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .heatmap-label {
+            width: 60px;
+            font-size: 0.6rem;
+            color: #64748B;
+            display: flex;
+            align-items: center;
+        }
+
+        .heatmap-head {
+            font-size: 0.55rem;
+            color: #94A3B8;
+            font-weight: 600;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TROUBLESHOOTING
+           ═══════════════════════════════════════════════════════════ */
+        .trouble-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .trouble-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.75rem;
+            transition: all 0.3s;
+        }
+
+        .trouble-card:hover {
+            border-color: rgba(99,102,241,0.3);
+            transform: translateY(-2px);
+        }
+
+        .trouble-problem {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .trouble-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .trouble-label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.2rem;
+        }
+
+        .trouble-label.problem { color: var(--danger); }
+        .trouble-label.solution { color: var(--success); }
+
+        .trouble-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .trouble-text strong { color: var(--text); }
+
+        .trouble-solution {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           TECH STACK
+           ═══════════════════════════════════════════════════════════ */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .tech-category {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .tech-category-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .tech-items { display: flex; flex-direction: column; gap: 0.75rem; }
+
+        .tech-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: var(--radius-sm);
+            background: rgba(255,255,255,0.02);
+            transition: all 0.2s;
+        }
+
+        .tech-item:hover { background: rgba(99,102,241,0.08); }
+
+        .tech-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .tech-item-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .tech-item-desc {
+            font-size: 0.72rem;
+            color: var(--text-dim);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           FOLDER STRUCTURE
+           ═══════════════════════════════════════════════════════════ */
+        .folder-tree {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            line-height: 1.9;
+            color: var(--text-muted);
+            padding: 1.5rem;
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+        }
+
+        .folder-tree .folder { color: var(--accent); font-weight: 600; }
+        .folder-tree .file { color: var(--text-muted); }
+        .folder-tree .comment { color: var(--text-dim); font-style: italic; }
+
+        /* ═══════════════════════════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════════════════════════ */
+        .footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .footer-text {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            transition: all 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--primary-light); transform: translateY(-2px); }
+
+        /* ═══════════════════════════════════════════════════════════
+           ANIMATIONS
+           ═══════════════════════════════════════════════════════════ */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════════════════════════ */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-hamburger { display: block; }
+            .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+            .kpi-row { grid-template-columns: repeat(2, 1fr); }
+            .kpi-row > :last-child { grid-column: span 2; }
+            .chart-area { grid-template-columns: 1fr; }
+            .arch-pipeline { flex-direction: column; align-items: stretch; }
+            .arch-arrow { transform: rotate(90deg); min-width: auto; padding: 0.5rem 0; }
+            .heatmap-cell { width: 32px; height: 22px; font-size: 0.5rem; }
+            .slack-fields { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-stats { grid-template-columns: 1fr 1fr; }
+            .feature-header { flex-direction: column; }
+        }
+
+        /* JSON/Event Table */
+        .event-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+            margin-top: 1rem;
+        }
+
+        .event-table th {
+            background: rgba(99,102,241,0.1);
+            padding: 0.6rem 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary-light);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .event-table td {
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid rgba(51,65,85,0.5);
+            color: var(--text-muted);
+        }
+
+        .event-table tr:hover td { background: rgba(99,102,241,0.04); }
+
+        .event-table code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            background: rgba(99,102,241,0.1);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+
+        .tag-auth { background: rgba(139,92,246,0.15); color: #A78BFA; }
+        .tag-payment { background: rgba(16,185,129,0.15); color: #34D399; }
+        .tag-product { background: rgba(6,182,212,0.15); color: #22D3EE; }
+        .tag-screen { background: rgba(245,158,11,0.15); color: #FBBF24; }
+        .tag-system { background: rgba(239,68,68,0.15); color: #F87171; }
+
+        /* Scroll to top */
+        .scroll-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--gradient-1);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 999;
+            border: none;
+            box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+        }
+
+        .scroll-top.show { opacity: 1; }
+        .scroll-top:hover { transform: translateY(-3px); }
+
+        /* Tab style */
+        .json-tab {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <!-- ══════════════ NAVIGATION ══════════════ -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <div class="nav-logo">
+                <i class="fas fa-bolt"></i> QuickPay DataOps
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="#overview">개요</a>
+                <a href="#architecture">아키텍처</a>
+                <a href="#features">구현 상세</a>
+                <a href="#troubleshooting">트러블슈팅</a>
+                <a href="#techstack">기술 스택</a>
+            </div>
+            <button class="nav-hamburger" onclick="document.getElementById('navLinks').classList.toggle('show-mobile')">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ══════════════ HERO ══════════════ -->
+    <section class="hero" id="overview">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-circle"></i> End-to-End DataOps Portfolio
+            </div>
+            <h1>
+                핀테크 <span class="gradient-text">QuickPay</span><br>
+                데이터 운영 파이프라인 구축
+            </h1>
+            <p class="hero-desc">
+                대용량 트랜잭션 환경을 가정한 <strong>로그 설계</strong>부터 <strong>지표 시각화</strong>,
+                <strong>품질 모니터링</strong>까지 — DataOps 전 과정을 구현한 End-to-End 프로젝트
+            </p>
+            <div class="hero-buttons">
+                <a href="https://github.com/jiminnote/fintech-dataops_portfolio" class="btn btn-primary" target="_blank">
+                    <i class="fab fa-github"></i> GitHub 보기
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <i class="fas fa-arrow-down"></i> 자세히 보기
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">모듈 구성</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">28</div>
+                    <div class="stat-label">이벤트 택소노미</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">품질 검증 규칙</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">핵심 KPI</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ GOALS ══════════════ -->
+    <section class="section" id="goals">
+        <div class="section-header">
+            <div class="section-tag"><i class="fas fa-bullseye"></i> OBJECTIVES</div>
+            <h2 class="section-title">프로젝트 핵심 목표</h2>
+            <p class="section-subtitle">데이터 신뢰성, 파이프라인 자동화, 확장 가능한 모델링을 지향합니다</p>
+        </div>
+        <div class="hero-stats" style="animation: none; opacity: 1;">
+            <div class="stat-card">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🛡️</div>
+                <div class="stat-label" style="font-size: 0.9rem; color: var(--text); font-weight: 700;">Reliability</div>
+                <div class="stat-label" style="margin-top: 0.5rem;">비즈니스 데이터의<br>신뢰성 확보</div>
+            </div>
+            <div class="stat-card">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔭</div>
+                <div class="stat-label" style="font-size: 0.9rem; color: var(--text); font-weight: 700;">Observability</div>
+                <div class="stat-label" style="margin-top: 0.5rem;">파이프라인 자동화 및<br>가시성 구축</div>
+            </div>
+            <div class="stat-card">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📐</div>
+                <div class="stat-label" style="font-size: 0.9rem; color: var(--text); font-weight: 700;">Scalability</div>
+                <div class="stat-label" style="margin-top: 0.5rem;">확장 가능한<br>데이터 모델링</div>
+            </div>
+            <div class="stat-card">
+                <div style="font-size: 2rem; margin-bottom: 0.5rem;">📊</div>
+                <div class="stat-label" style="font-size: 0.9rem; color: var(--text); font-weight: 700;">Business Value</div>
+                <div class="stat-label" style="margin-top: 0.5rem;">의사결정을 위한<br>데이터 시각화</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ ARCHITECTURE ══════════════ -->
+    <section class="section" id="architecture">
+        <div class="section-header">
+            <div class="section-tag"><i class="fas fa-project-diagram"></i> SYSTEM ARCHITECTURE</div>
+            <h2 class="section-title">아키텍처 및 데이터 흐름</h2>
+            <p class="section-subtitle">데이터 수집부터 시각화까지, 전체 파이프라인의 흐름을 한눈에</p>
+        </div>
+
+        <div class="arch-pipeline fade-in">
+            <div class="arch-step">
+                <div class="arch-step-inner">
+                    <div class="arch-icon" style="background: rgba(245,158,11,0.15); color: #FBBF24;">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="arch-step-title">Source</div>
+                    <div class="arch-step-tech">App Logs · DB</div>
+                </div>
+            </div>
+            <div class="arch-arrow"><i class="fas fa-chevron-right"></i></div>
+            <div class="arch-step">
+                <div class="arch-step-inner">
+                    <div class="arch-icon" style="background: rgba(6,182,212,0.15); color: #22D3EE;">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <div class="arch-step-title">Ingestion</div>
+                    <div class="arch-step-tech">Python Generator</div>
+                </div>
+            </div>
+            <div class="arch-arrow"><i class="fas fa-chevron-right"></i></div>
+            <div class="arch-step">
+                <div class="arch-step-inner">
+                    <div class="arch-icon" style="background: rgba(139,92,246,0.15); color: #A78BFA;">
+                        <i class="fas fa-warehouse"></i>
+                    </div>
+                    <div class="arch-step-title">Storage</div>
+                    <div class="arch-step-tech">DuckDB · PostgreSQL</div>
+                </div>
+            </div>
+            <div class="arch-arrow"><i class="fas fa-chevron-right"></i></div>
+            <div class="arch-step">
+                <div class="arch-step-inner">
+                    <div class="arch-icon" style="background: rgba(16,185,129,0.15); color: #34D399;">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="arch-step-title">Transform</div>
+                    <div class="arch-step-tech">dbt (ELT)</div>
+                </div>
+            </div>
+            <div class="arch-arrow"><i class="fas fa-chevron-right"></i></div>
+            <div class="arch-step">
+                <div class="arch-step-inner">
+                    <div class="arch-icon" style="background: rgba(99,102,241,0.15); color: #818CF8;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="arch-step-title">Orchestration</div>
+                    <div class="arch-step-tech">Apache Airflow</div>
+                </div>
+            </div>
+            <div class="arch-arrow"><i class="fas fa-chevron-right"></i></div>
+            <div class="arch-step">
+                <div class="arch-step-inner">
+                    <div class="arch-icon" style="background: rgba(239,68,68,0.15); color: #F87171;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="arch-step-title">Quality</div>
+                    <div class="arch-step-tech">GE · Slack Alert</div>
+                </div>
+            </div>
+            <div class="arch-arrow"><i class="fas fa-chevron-right"></i></div>
+            <div class="arch-step">
+                <div class="arch-step-inner">
+                    <div class="arch-icon" style="background: rgba(245,158,11,0.15); color: #FBBF24;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="arch-step-title">Serving / BI</div>
+                    <div class="arch-step-tech">Tableau</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ FEATURES ══════════════ -->
+    <section class="section" id="features">
+        <div class="section-header">
+            <div class="section-tag"><i class="fas fa-rocket"></i> KEY FEATURES</div>
+            <h2 class="section-title">핵심 구현 내용</h2>
+            <p class="section-subtitle">GitHub 코드 구조 기반, DataOps 직무 역량 어필 포인트</p>
+        </div>
+
+        <div class="features-grid">
+
+            <!-- ─── FEATURE 1: Log Design ─── -->
+            <div class="feature-card fade-in">
+                <div class="feature-header">
+                    <div class="feature-icon" style="background: rgba(139,92,246,0.15); color: #A78BFA;">
+                        <i class="fas fa-scroll"></i>
+                    </div>
+                    <div class="feature-meta">
+                        <div class="feature-number">Feature 01 — 01_log_design/</div>
+                        <div class="feature-title">로그 설계 및 데이터 거버넌스</div>
+                        <div class="feature-desc">
+                            무작위로 데이터를 쌓은 것이 아니라, <strong>체계적인 규칙(Taxonomy)</strong>을 정의하여 
+                            5개 도메인 × 28개 이벤트의 표준화된 로그 체계를 설계했습니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-body">
+                    <div class="feature-highlights">
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>Category-Action-Label</strong> 구조의 이벤트 택소노미 정의</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>JSON Schema</strong>를 통한 데이터 유효성 검증 설계</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>{domain}_{action}_{detail}</strong> snake_case 네이밍 컨벤션</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>UUID v4</strong> 기반 이벤트 고유 식별자 체계</div>
+                        </div>
+                    </div>
+
+                    <!-- Taxonomy Table -->
+                    <table class="event-table">
+                        <thead>
+                            <tr>
+                                <th>도메인</th>
+                                <th>이벤트 예시</th>
+                                <th>트리거</th>
+                                <th>비즈니스 용도</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tag tag-auth">Auth</span></td>
+                                <td><code>auth_signup_completed</code></td>
+                                <td>가입 완료</td>
+                                <td>가입 완료율, DAU</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag tag-payment">Payment</span></td>
+                                <td><code>payment_transfer_completed</code></td>
+                                <td>송금 성공</td>
+                                <td>매출, GMV</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag tag-product">Product</span></td>
+                                <td><code>product_detail_viewed</code></td>
+                                <td>상품 상세 조회</td>
+                                <td>상품 인기도</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag tag-screen">Screen</span></td>
+                                <td><code>screen_viewed</code></td>
+                                <td>화면 진입</td>
+                                <td>트래픽 분석</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag tag-system">System</span></td>
+                                <td><code>system_error_occurred</code></td>
+                                <td>에러 발생</td>
+                                <td>에러 모니터링</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Sample JSON -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <div class="code-dots"><span></span><span></span><span></span></div>
+                            <div class="code-filename">sample_events.json</div>
+                        </div>
+                        <div class="code-content"><pre>{
+  <span class="str">"event_id"</span>: <span class="str">"550e8400-e29b-41d4-a716-446655440002"</span>,
+  <span class="str">"event_name"</span>: <span class="str">"payment_transfer_completed"</span>,
+  <span class="str">"event_timestamp"</span>: <span class="str">"2026-02-12T10:23:45.789Z"</span>,
+  <span class="str">"user_id"</span>: <span class="str">"usr_a1b2c3d4"</span>,
+  <span class="str">"platform"</span>: <span class="str">"ios"</span>,
+  <span class="str">"app_version"</span>: <span class="str">"3.2.1"</span>,
+  <span class="str">"event_properties"</span>: {
+    <span class="str">"amount"</span>: <span class="num">50000</span>,
+    <span class="str">"currency"</span>: <span class="str">"KRW"</span>,
+    <span class="str">"transfer_type"</span>: <span class="str">"instant"</span>,
+    <span class="str">"fee"</span>: <span class="num">0</span>,
+    <span class="str">"latency_ms"</span>: <span class="num">342</span>
+  }
+}</pre></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── FEATURE 2: Data Modeling ─── -->
+            <div class="feature-card fade-in">
+                <div class="feature-header">
+                    <div class="feature-icon" style="background: rgba(16,185,129,0.15); color: #34D399;">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <div class="feature-meta">
+                        <div class="feature-number">Feature 02 — 04_dbt_mart/</div>
+                        <div class="feature-title">데이터 모델링 및 변환 (dbt)</div>
+                        <div class="feature-desc">
+                            Raw Data를 분석 가능한 형태로 변환하는 <strong>ELT 패턴</strong>을 적용하고,
+                            <strong>Staging → Intermediate → Marts</strong> 3계층 구조로 데이터 마트를 설계했습니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-body">
+                    <div class="feature-highlights">
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>ELT 패턴</strong> — Load first, Transform later</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>dbt Lineage</strong> — 데이터 의존성 추적 및 관리</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>3계층 마트</strong> — Staging → Intermediate → Marts</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>dbt test</strong> — 데이터 무결성 자동 검증</div>
+                        </div>
+                    </div>
+
+                    <!-- DAG Lineage -->
+                    <div class="dag-visual">
+                        <div class="dag-label">dbt Lineage Graph (DAG)</div>
+                        <div class="dag-row">
+                            <div class="dag-node source">events</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node staging">stg_events</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node intermediate">int_daily_active_users</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node mart">mart_daily_kpi</div>
+                        </div>
+                        <div class="dag-row">
+                            <div class="dag-node source" style="visibility: hidden;">_</div>
+                            <div class="dag-arrow-h" style="visibility: hidden;">→</div>
+                            <div class="dag-node staging" style="visibility: hidden;">_</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node intermediate">int_funnel_conversion</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node mart">mart_funnel</div>
+                        </div>
+                        <div class="dag-row">
+                            <div class="dag-node source" style="visibility: hidden;">_</div>
+                            <div class="dag-arrow-h" style="visibility: hidden;">→</div>
+                            <div class="dag-node staging" style="visibility: hidden;">_</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node intermediate">int_user_cohort</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node mart">mart_retention</div>
+                        </div>
+                        <div class="dag-row" style="margin-top: 0.75rem;">
+                            <div class="dag-node source">transactions</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node staging">stg_transactions</div>
+                            <div class="dag-arrow-h" style="visibility: hidden;">→</div>
+                            <div class="dag-node intermediate" style="visibility: hidden;">_</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node mart">mart_revenue</div>
+                        </div>
+                        <div class="dag-row">
+                            <div class="dag-node source">users</div>
+                            <div class="dag-arrow-h">→</div>
+                            <div class="dag-node staging">stg_users</div>
+                            <div class="dag-arrow-h" style="visibility: hidden;">→</div>
+                            <div class="dag-node intermediate" style="visibility: hidden;">_</div>
+                            <div class="dag-arrow-h" style="visibility: hidden;">→</div>
+                            <div class="dag-node mart" style="visibility: hidden;">_</div>
+                        </div>
+                    </div>
+
+                    <!-- SQL snippet -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <div class="code-dots"><span></span><span></span><span></span></div>
+                            <div class="code-filename">models/marts/mart_daily_kpi.sql</div>
+                        </div>
+                        <div class="code-content"><pre><span class="cm">-- 일간 핵심 KPI 마트: Tableau 대시보드의 메인 데이터 소스</span>
+<span class="kw">WITH</span> daily_users <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        activity_date,
+        <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> user_id) <span class="kw">AS</span> dau,
+        <span class="fn">COUNT</span>(<span class="kw">DISTINCT CASE WHEN</span> user_type = <span class="str">'new'</span>
+              <span class="kw">THEN</span> user_id <span class="kw">END</span>) <span class="kw">AS</span> new_users,
+        <span class="fn">COUNT</span>(<span class="kw">DISTINCT CASE WHEN</span> user_type = <span class="str">'returning'</span>
+              <span class="kw">THEN</span> user_id <span class="kw">END</span>) <span class="kw">AS</span> returning_users
+    <span class="kw">FROM</span> {{ <span class="fn">ref</span>(<span class="str">'int_daily_active_users'</span>) }}
+    <span class="kw">GROUP BY</span> <span class="num">1</span>
+),
+daily_transactions <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        transaction_date,
+        <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> status = <span class="str">'completed'</span>
+            <span class="kw">THEN</span> amount <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>) <span class="kw">AS</span> gmv,
+        <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> status = <span class="str">'completed'</span>
+            <span class="kw">THEN</span> fee <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>) <span class="kw">AS</span> total_fee_revenue
+    <span class="kw">FROM</span> {{ <span class="fn">ref</span>(<span class="str">'stg_transactions'</span>) }}
+    <span class="kw">GROUP BY</span> <span class="num">1</span>
+)</pre></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── FEATURE 3: Airflow ─── -->
+            <div class="feature-card fade-in">
+                <div class="feature-header">
+                    <div class="feature-icon" style="background: rgba(99,102,241,0.15); color: #818CF8;">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div class="feature-meta">
+                        <div class="feature-number">Feature 03 — 08_airflow_dags/</div>
+                        <div class="feature-title">워크플로우 오케스트레이션 (Airflow)</div>
+                        <div class="feature-desc">
+                            데이터 파이프라인의 <strong>자동화 및 스케줄링</strong>을 구현하고,
+                            Task 간 의존성 관리와 실패 시 재시도 정책, 조건 분기 로직을 포함했습니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-body">
+                    <div class="feature-highlights">
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>Task 의존성</strong> — 데이터 검증 → dbt → 품질 → 시각화</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>재시도 정책</strong> — retries=2, retry_delay=5min</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>BranchOperator</strong> — 품질 점수 기반 조건 분기</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>3개 DAG</strong> — 일간 지표 / 품질 검증 / Tableau 갱신</div>
+                        </div>
+                    </div>
+
+                    <!-- Airflow DAG Visualization -->
+                    <div style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-dim); font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;">Airflow DAG: quickpay_daily_metrics</div>
+                    <div class="airflow-dag">
+                        <div class="airflow-node success">
+                            <span class="node-status">✅</span>
+                            check_data_freshness
+                        </div>
+                        <div class="airflow-arrow">→</div>
+                        <div class="airflow-node success">
+                            <span class="node-status">✅</span>
+                            run_dbt_models
+                        </div>
+                        <div class="airflow-arrow">→</div>
+                        <div class="airflow-node success">
+                            <span class="node-status">✅</span>
+                            run_dbt_tests
+                        </div>
+                        <div class="airflow-arrow">→</div>
+                        <div class="airflow-node success">
+                            <span class="node-status">✅</span>
+                            run_quality_checks
+                        </div>
+                        <div class="airflow-arrow">→</div>
+                        <div class="airflow-node branch">
+                            <span class="node-status">🔀</span>
+                            branch_on_quality
+                        </div>
+                        <div class="airflow-arrow">→</div>
+                        <div class="airflow-node success">
+                            <span class="node-status">✅</span>
+                            export_tableau_data
+                        </div>
+                        <div class="airflow-arrow">→</div>
+                        <div class="airflow-node success">
+                            <span class="node-status">✅</span>
+                            notify_success
+                        </div>
+                    </div>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <div class="code-dots"><span></span><span></span><span></span></div>
+                            <div class="code-filename">dag_daily_metrics.py — 분기 로직</div>
+                        </div>
+                        <div class="code-content"><pre><span class="kw">def</span> <span class="fn">_check_quality_result</span>(**kwargs):
+    <span class="str">"""품질 점수에 따라 다음 작업을 분기"""</span>
+    report_dir = Path(<span class="str">"/opt/airflow/.../reports"</span>)
+    report_files = <span class="fn">sorted</span>(report_dir.glob(<span class="str">"quality_report_*.json"</span>))
+
+    <span class="kw">with</span> <span class="fn">open</span>(report_files[<span class="num">-1</span>]) <span class="kw">as</span> f:
+        report = json.<span class="fn">load</span>(f)
+
+    <span class="cm"># 품질 점수 80% 미만이면 실패 경로</span>
+    <span class="kw">if</span> report[<span class="str">"quality_score"</span>] < <span class="num">80</span>:
+        <span class="kw">return</span> <span class="str">"notify_failure"</span>
+    <span class="kw">else</span>:
+        <span class="kw">return</span> <span class="str">"export_tableau_data"</span>
+
+branch_on_quality = <span class="fn">BranchPythonOperator</span>(
+    task_id=<span class="str">"branch_on_quality"</span>,
+    python_callable=_check_quality_result,
+)</pre></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── FEATURE 4: Data Quality ─── -->
+            <div class="feature-card fade-in">
+                <div class="feature-header">
+                    <div class="feature-icon" style="background: rgba(239,68,68,0.15); color: #F87171;">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-meta">
+                        <div class="feature-number">Feature 04 — 07_data_quality/</div>
+                        <div class="feature-title">데이터 품질 관리 (Data Quality & QA)</div>
+                        <div class="feature-desc">
+                            "쓰레기 데이터(GIGO)"를 막기 위한 <strong>다층 방어 체계</strong>를 구축하고,
+                            이상 발생 시 <strong>Slack 알림 자동화</strong>로 운영 대응 속도를 확보했습니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-body">
+                    <div class="feature-highlights">
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>Great Expectations</strong> + dbt test 이중 검증 체계</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>15+ 검증 규칙</strong> — Null, Unique, 비즈니스 로직</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>Slack Webhook</strong> — Block Kit 기반 리포트 알림</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>Z-score 이상 탐지</strong> — 볼륨 이상치 자동 감지</div>
+                        </div>
+                    </div>
+
+                    <!-- Quality Dashboard -->
+                    <div class="quality-dashboard">
+                        <div class="quality-header-row">
+                            <div class="quality-score">
+                                <div class="quality-score-ring">
+                                    <span class="quality-score-value">93%</span>
+                                </div>
+                                <div class="quality-score-label">Quality Score</div>
+                            </div>
+                            <div class="quality-stats">
+                                <div class="quality-stat">
+                                    <div class="quality-stat-value pass">14</div>
+                                    <div class="quality-stat-label">Passed</div>
+                                </div>
+                                <div class="quality-stat">
+                                    <div class="quality-stat-value fail">1</div>
+                                    <div class="quality-stat-label">Failed</div>
+                                </div>
+                                <div class="quality-stat">
+                                    <div class="quality-stat-value total">15</div>
+                                    <div class="quality-stat-label">Total Checks</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quality-checks">
+                            <div class="quality-check-item"><span class="status-icon">✅</span> events_not_null_event_id</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> events_unique_event_id</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> events_valid_event_name</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> events_valid_platform</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> events_not_null_timestamp</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> txn_not_null_id</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> txn_valid_amount</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> txn_no_negative_fee</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> txn_valid_status</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> volume_z_score_normal</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> events_semantic_version</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> events_user_id_pattern</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> txn_success_rate_above_90</div>
+                            <div class="quality-check-item"><span class="status-icon">✅</span> freshness_within_24h</div>
+                            <div class="quality-check-item"><span class="status-icon">🟡</span> txn_users_exist_in_users</div>
+                        </div>
+                    </div>
+
+                    <!-- Slack Mockup -->
+                    <div class="slack-mockup">
+                        <div class="slack-header">
+                            <div class="slack-avatar">🤖</div>
+                            <div>
+                                <span class="slack-username">QuickPay DataBot</span>
+                                <span class="slack-tag">APP</span>
+                                <span class="slack-time">오전 6:31</span>
+                            </div>
+                        </div>
+                        <div class="slack-body">
+                            <div class="slack-attachment success">
+                                <div class="slack-attachment-title">✅ QuickPay 데이터 품질 리포트</div>
+                                <div class="slack-fields">
+                                    <div>
+                                        <div class="slack-field-label">품질 점수</div>
+                                        <div class="slack-field-value">93.3%</div>
+                                    </div>
+                                    <div>
+                                        <div class="slack-field-label">검증 결과</div>
+                                        <div class="slack-field-value">✅ 14 / ❌ 1 / 전체 15</div>
+                                    </div>
+                                    <div>
+                                        <div class="slack-field-label">실행 시각</div>
+                                        <div class="slack-field-value">2026-02-13 06:30</div>
+                                    </div>
+                                    <div>
+                                        <div class="slack-field-label">환경</div>
+                                        <div class="slack-field-value">DuckDB (dev)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── FEATURE 5: Visualization ─── -->
+            <div class="feature-card fade-in">
+                <div class="feature-header">
+                    <div class="feature-icon" style="background: rgba(245,158,11,0.15); color: #FBBF24;">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="feature-meta">
+                        <div class="feature-number">Feature 05 — 06_tableau_dashboard/</div>
+                        <div class="feature-title">데이터 시각화 및 인사이트</div>
+                        <div class="feature-desc">
+                            구축한 파이프라인을 통해 최종적으로 <strong>비즈니스 가치를 창출</strong>하는 결과물을 생성하고,
+                            의사결정자를 위한 <strong>직관적인 대시보드</strong>를 설계했습니다.
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-body">
+                    <div class="feature-highlights">
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>5개 핵심 KPI</strong> — DAU, GMV, ARPPU, 전환율, 리텐션</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>4개 대시보드</strong> — KPI 종합 / 퍼널 / 리텐션 / 매출</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>인터랙티브 필터</strong> — 날짜, 플랫폼, 코호트별</div>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="highlight-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="highlight-text"><strong>Metrics Tree</strong> — NSM → KPI → 운영지표 분해 체계</div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Mockup -->
+                    <div class="dashboard-mockup">
+                        <div class="dashboard-title-bar">
+                            <div class="dashboard-title-text">📈 QuickPay Executive KPI Dashboard</div>
+                            <div class="dashboard-filter-row">
+                                <div class="dashboard-filter">📅 최근 30일</div>
+                                <div class="dashboard-filter">📱 전체 플랫폼</div>
+                            </div>
+                        </div>
+
+                        <!-- KPI Cards -->
+                        <div class="kpi-row">
+                            <div class="kpi-card-mock">
+                                <div class="kpi-label">DAU</div>
+                                <div class="kpi-value">85.2K</div>
+                                <div class="kpi-change up">▲ 12.3%</div>
+                            </div>
+                            <div class="kpi-card-mock">
+                                <div class="kpi-label">MAU</div>
+                                <div class="kpi-value">342K</div>
+                                <div class="kpi-change up">▲ 8.7%</div>
+                            </div>
+                            <div class="kpi-card-mock">
+                                <div class="kpi-label">GMV</div>
+                                <div class="kpi-value">₩48.2B</div>
+                                <div class="kpi-change up">▲ 15.1%</div>
+                            </div>
+                            <div class="kpi-card-mock">
+                                <div class="kpi-label">수수료 매출</div>
+                                <div class="kpi-value">₩2.1B</div>
+                                <div class="kpi-change up">▲ 9.4%</div>
+                            </div>
+                            <div class="kpi-card-mock">
+                                <div class="kpi-label">성공률</div>
+                                <div class="kpi-value">97.8%</div>
+                                <div class="kpi-change up">▲ 0.3%</div>
+                            </div>
+                        </div>
+
+                        <!-- Charts Row -->
+                        <div class="chart-area">
+                            <div class="chart-box">
+                                <div class="chart-box-title">📊 DAU Trend (7일 이동평균)</div>
+                                <div class="mini-chart">
+                                    <div class="mini-bar" style="height: 55%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 60%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 52%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 65%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 70%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 63%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 58%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 72%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 68%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 75%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 71%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 78%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 45%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 42%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 80%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 83%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 76%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 85%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 82%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 88%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 50%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 48%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 90%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 92%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 87%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 95%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 90%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 97%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 55%; background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                    <div class="mini-bar" style="height: 100%;background: linear-gradient(to top, #6366F1, #818CF8);"></div>
+                                </div>
+                            </div>
+                            <div class="chart-box">
+                                <div class="chart-box-title">🔄 Conversion Funnel</div>
+                                <div class="funnel-visual">
+                                    <div class="funnel-bar" style="width: 100%; background: linear-gradient(90deg, #6366F1, #818CF8);">가입 시작 <span class="funnel-pct">100%</span></div>
+                                    <div class="funnel-bar" style="width: 85%; background: linear-gradient(90deg, #7C3AED, #A78BFA);">정보 제출 <span class="funnel-pct">85%</span></div>
+                                    <div class="funnel-bar" style="width: 72%; background: linear-gradient(90deg, #8B5CF6, #C084FC);">가입 완료 <span class="funnel-pct">72%</span></div>
+                                    <div class="funnel-bar" style="width: 58%; background: linear-gradient(90deg, #06B6D4, #22D3EE);">본인인증 <span class="funnel-pct">58%</span></div>
+                                    <div class="funnel-bar" style="width: 45%; background: linear-gradient(90deg, #0891B2, #67E8F9);">첫 송금 시도 <span class="funnel-pct">45%</span></div>
+                                    <div class="funnel-bar" style="width: 38%; background: linear-gradient(90deg, #10B981, #34D399);">첫 송금 완료 <span class="funnel-pct">38%</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Retention Heatmap -->
+                        <div class="chart-box" style="margin-top: 1rem;">
+                            <div class="chart-box-title">📊 Retention Cohort Heatmap</div>
+                            <div class="heatmap">
+                                <div class="heatmap-row">
+                                    <div class="heatmap-label heatmap-head"></div>
+                                    <div class="heatmap-cell" style="background: transparent;"><span class="heatmap-head">D0</span></div>
+                                    <div class="heatmap-cell" style="background: transparent;"><span class="heatmap-head">D1</span></div>
+                                    <div class="heatmap-cell" style="background: transparent;"><span class="heatmap-head">D3</span></div>
+                                    <div class="heatmap-cell" style="background: transparent;"><span class="heatmap-head">D7</span></div>
+                                    <div class="heatmap-cell" style="background: transparent;"><span class="heatmap-head">D14</span></div>
+                                    <div class="heatmap-cell" style="background: transparent;"><span class="heatmap-head">D30</span></div>
+                                </div>
+                                <div class="heatmap-row">
+                                    <div class="heatmap-label">W1</div>
+                                    <div class="heatmap-cell" style="background: #15803D; color: white;">100%</div>
+                                    <div class="heatmap-cell" style="background: #22C55E; color: white;">62%</div>
+                                    <div class="heatmap-cell" style="background: #86EFAC; color: #1E293B;">48%</div>
+                                    <div class="heatmap-cell" style="background: #FDE047; color: #1E293B;">38%</div>
+                                    <div class="heatmap-cell" style="background: #FB923C; color: white;">29%</div>
+                                    <div class="heatmap-cell" style="background: #EF4444; color: white;">22%</div>
+                                </div>
+                                <div class="heatmap-row">
+                                    <div class="heatmap-label">W2</div>
+                                    <div class="heatmap-cell" style="background: #15803D; color: white;">100%</div>
+                                    <div class="heatmap-cell" style="background: #22C55E; color: white;">58%</div>
+                                    <div class="heatmap-cell" style="background: #86EFAC; color: #1E293B;">45%</div>
+                                    <div class="heatmap-cell" style="background: #FDE047; color: #1E293B;">35%</div>
+                                    <div class="heatmap-cell" style="background: #FB923C; color: white;">26%</div>
+                                    <div class="heatmap-cell" style="background: #EF4444; color: white;">20%</div>
+                                </div>
+                                <div class="heatmap-row">
+                                    <div class="heatmap-label">W3</div>
+                                    <div class="heatmap-cell" style="background: #15803D; color: white;">100%</div>
+                                    <div class="heatmap-cell" style="background: #22C55E; color: white;">65%</div>
+                                    <div class="heatmap-cell" style="background: #86EFAC; color: #1E293B;">51%</div>
+                                    <div class="heatmap-cell" style="background: #86EFAC; color: #1E293B;">42%</div>
+                                    <div class="heatmap-cell" style="background: #FDE047; color: #1E293B;">32%</div>
+                                    <div class="heatmap-cell" style="background: #FB923C; color: white;">24%</div>
+                                </div>
+                                <div class="heatmap-row">
+                                    <div class="heatmap-label">W4</div>
+                                    <div class="heatmap-cell" style="background: #15803D; color: white;">100%</div>
+                                    <div class="heatmap-cell" style="background: #22C55E; color: white;">60%</div>
+                                    <div class="heatmap-cell" style="background: #86EFAC; color: #1E293B;">47%</div>
+                                    <div class="heatmap-cell" style="background: #FDE047; color: #1E293B;">36%</div>
+                                    <div class="heatmap-cell" style="background: #FB923C; color: white;">28%</div>
+                                    <div class="heatmap-cell" style="background: #EF4444; color: white;">21%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /features-grid -->
+    </section>
+
+    <!-- ══════════════ TROUBLESHOOTING ══════════════ -->
+    <section class="section" id="troubleshooting">
+        <div class="section-header">
+            <div class="section-tag"><i class="fas fa-wrench"></i> TROUBLESHOOTING</div>
+            <h2 class="section-title">트러블슈팅 및 배운 점</h2>
+            <p class="section-subtitle">단순히 "완성했다"보다 "어려움을 극복했다"가 더 큰 성장입니다</p>
+        </div>
+
+        <div class="trouble-grid">
+            <div class="trouble-card fade-in">
+                <div class="trouble-problem">
+                    <div class="trouble-icon" style="background: rgba(239,68,68,0.15); color: #F87171;">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div>
+                        <div class="trouble-label problem">Problem</div>
+                        <div class="trouble-text">대량의 로그 데이터 적재 시 <strong>Airflow Worker 메모리 부족</strong> 현상 발생</div>
+                    </div>
+                </div>
+                <div class="trouble-solution">
+                    <div class="trouble-icon" style="background: rgba(16,185,129,0.15); color: #34D399;">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <div class="trouble-label solution">Solution</div>
+                        <div class="trouble-text">배치를 <strong>Chunking</strong>으로 분할하고, SQL 기반 연산(<strong>ELT 패턴</strong>)으로 부하를 DB로 위임하여 해결. Python에서의 데이터 처리를 최소화하고 DuckDB/PostgreSQL 내부에서 변환 수행.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trouble-card fade-in">
+                <div class="trouble-problem">
+                    <div class="trouble-icon" style="background: rgba(239,68,68,0.15); color: #F87171;">
+                        <i class="fas fa-clone"></i>
+                    </div>
+                    <div>
+                        <div class="trouble-label problem">Problem</div>
+                        <div class="trouble-text">파이프라인 재실행 시 <strong>중복 데이터 적재</strong> 이슈 발생</div>
+                    </div>
+                </div>
+                <div class="trouble-solution">
+                    <div class="trouble-icon" style="background: rgba(16,185,129,0.15); color: #34D399;">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <div class="trouble-label solution">Solution</div>
+                        <div class="trouble-text">dbt <strong>incremental 모델</strong> 적용 및 <strong>unique_key</strong> 설정을 통한 멱등성(Idempotency) 보장. 재실행해도 동일한 결과가 보장되는 파이프라인 설계.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trouble-card fade-in">
+                <div class="trouble-problem">
+                    <div class="trouble-icon" style="background: rgba(239,68,68,0.15); color: #F87171;">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <div class="trouble-label problem">Problem</div>
+                        <div class="trouble-text">품질 검증 결과가 있어도 <strong>알림 없이 방치</strong>되어 데이터 이슈 늦게 발견</div>
+                    </div>
+                </div>
+                <div class="trouble-solution">
+                    <div class="trouble-icon" style="background: rgba(16,185,129,0.15); color: #34D399;">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <div class="trouble-label solution">Solution</div>
+                        <div class="trouble-text"><strong>Slack Webhook + Block Kit</strong> 기반 자동 알림 시스템 구축. 심각도(Critical/Warning)에 따른 차등 알림으로 <strong>운영 대응 속도 개선</strong>.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="trouble-card fade-in">
+                <div class="trouble-problem">
+                    <div class="trouble-icon" style="background: rgba(239,68,68,0.15); color: #F87171;">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <div>
+                        <div class="trouble-label problem">Problem</div>
+                        <div class="trouble-text">지표 정의가 팀마다 다르게 해석되어 <strong>데이터 정합성 이슈</strong> 발생</div>
+                    </div>
+                </div>
+                <div class="trouble-solution">
+                    <div class="trouble-icon" style="background: rgba(16,185,129,0.15); color: #34D399;">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <div class="trouble-label solution">Solution</div>
+                        <div class="trouble-text"><strong>Metrics Dictionary</strong>(지표 정의서)와 <strong>Data Lineage</strong> 문서를 작성하여 단일 진실 공급원(Single Source of Truth) 확보. dbt docs를 통한 자동 문서화.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ TECH STACK ══════════════ -->
+    <section class="section" id="techstack">
+        <div class="section-header">
+            <div class="section-tag"><i class="fas fa-microchip"></i> TECH STACK</div>
+            <h2 class="section-title">기술 스택</h2>
+            <p class="section-subtitle">프로젝트에 사용된 핵심 기술과 도구들</p>
+        </div>
+
+        <div class="tech-grid">
+            <div class="tech-category fade-in">
+                <div class="tech-category-title">Languages</div>
+                <div class="tech-items">
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(6,182,212,0.15); color: #22D3EE;">
+                            <i class="fab fa-python"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">Python 3.11+</div>
+                            <div class="tech-item-desc">데이터 생성, 품질 검증, ETL</div>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(99,102,241,0.15); color: #818CF8;">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">SQL</div>
+                            <div class="tech-item-desc">dbt 모델링, 지표 추출 쿼리</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-category fade-in">
+                <div class="tech-category-title">Frameworks & Tools</div>
+                <div class="tech-items">
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(16,185,129,0.15); color: #34D399;">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">dbt (Data Build Tool)</div>
+                            <div class="tech-item-desc">데이터 변환 및 마트 구축</div>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(99,102,241,0.15); color: #818CF8;">
+                            <i class="fas fa-wind"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">Apache Airflow</div>
+                            <div class="tech-item-desc">워크플로우 오케스트레이션</div>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(239,68,68,0.15); color: #F87171;">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">Great Expectations</div>
+                            <div class="tech-item-desc">데이터 품질 검증 프레임워크</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-category fade-in">
+                <div class="tech-category-title">Infrastructure</div>
+                <div class="tech-items">
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(245,158,11,0.15); color: #FBBF24;">
+                            <i class="fas fa-feather"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">DuckDB</div>
+                            <div class="tech-item-desc">로컬 분석용 In-Process DB</div>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(6,182,212,0.15); color: #22D3EE;">
+                            <i class="fas fa-elephant"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">PostgreSQL</div>
+                            <div class="tech-item-desc">프로덕션 데이터 웨어하우스</div>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(139,92,246,0.15); color: #A78BFA;">
+                            <i class="fab fa-docker"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">Docker</div>
+                            <div class="tech-item-desc">컨테이너 기반 로컬 환경</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tech-category fade-in">
+                <div class="tech-category-title">Visualization & Monitoring</div>
+                <div class="tech-items">
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(245,158,11,0.15); color: #FBBF24;">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">Tableau</div>
+                            <div class="tech-item-desc">KPI 대시보드 시각화</div>
+                        </div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-item-icon" style="background: rgba(139,92,246,0.15); color: #A78BFA;">
+                            <i class="fab fa-slack"></i>
+                        </div>
+                        <div>
+                            <div class="tech-item-name">Slack Webhook</div>
+                            <div class="tech-item-desc">품질 알림 자동화</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Structure -->
+        <div style="margin-top: 3rem;">
+            <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; text-align: center;">📁 프로젝트 구조</h3>
+            <div class="folder-tree">
+<pre><span class="folder">fintech-dataops-portfolio/</span>
+├── <span class="file">README.md</span>                          <span class="comment"># 프로젝트 개요</span>
+├── <span class="file">requirements.txt</span>                   <span class="comment"># Python 의존성</span>
+│
+├── <span class="folder">01_log_design/</span>                     <span class="comment"># ① 서비스 로그 설계</span>
+│   ├── <span class="file">event_taxonomy.md</span>              <span class="comment"># 이벤트 택소노미 (28개 이벤트)</span>
+│   ├── <span class="file">log_schema.md</span>                  <span class="comment"># 로그 스키마 정의서</span>
+│   ├── <span class="file">event_schema.json</span>              <span class="comment"># JSON Schema 유효성 검증</span>
+│   └── <span class="file">sample_events.json</span>             <span class="comment"># 샘플 이벤트 데이터</span>
+│
+├── <span class="folder">02_metrics_definition/</span>             <span class="comment"># ② 핵심 지표 정의</span>
+│   ├── <span class="file">metrics_dictionary.md</span>          <span class="comment"># KPI 정의서 (NSM → 5 KPIs → 10 OPs)</span>
+│   ├── <span class="file">metrics_tree.md</span>                <span class="comment"># 지표 트리 & 문제 진단 시나리오</span>
+│   └── <span class="file">data_lineage.md</span>               <span class="comment"># 데이터 리니지 문서</span>
+│
+├── <span class="folder">03_data_generation/</span>                <span class="comment"># 시뮬레이션 데이터 생성</span>
+│   ├── <span class="file">generate_events.py</span>             <span class="comment"># Faker 기반 이벤트 로그 생성</span>
+│   ├── <span class="file">generate_transactions.py</span>       <span class="comment"># 거래 데이터 생성기</span>
+│   └── <span class="file">load_to_db.py</span>                  <span class="comment"># DuckDB/PostgreSQL 적재</span>
+│
+├── <span class="folder">04_dbt_mart/</span>                       <span class="comment"># ③ dbt 데이터 마트</span>
+│   ├── <span class="folder">models/staging/</span>                <span class="comment"># 스테이징: 타임존 변환, 필터링</span>
+│   ├── <span class="folder">models/intermediate/</span>           <span class="comment"># 중간: DAU, 퍼널, 코호트 계산</span>
+│   ├── <span class="folder">models/marts/</span>                  <span class="comment"># 최종: KPI, 리텐션, 매출 마트</span>
+│   └── <span class="folder">tests/</span>                         <span class="comment"># dbt 테스트 (DAU>0, 매출≥0)</span>
+│
+├── <span class="folder">05_sql_queries/</span>                    <span class="comment"># ④ SQL 지표 추출 쿼리</span>
+│
+├── <span class="folder">06_tableau_dashboard/</span>              <span class="comment"># ⑤ Tableau 시각화</span>
+│   ├── <span class="file">dashboard_design.md</span>            <span class="comment"># 대시보드 설계서 (4개 시트)</span>
+│   └── <span class="folder">exports/</span>                       <span class="comment"># Tableau용 CSV (4종)</span>
+│
+├── <span class="folder">07_data_quality/</span>                   <span class="comment"># ⑥ 품질 모니터링</span>
+│   ├── <span class="folder">great_expectations/</span>            <span class="comment"># GE 검증 스위트</span>
+│   ├── <span class="file">run_quality_checks.py</span>          <span class="comment"># 15+ 품질 규칙 실행기</span>
+│   └── <span class="file">slack_alert.py</span>                 <span class="comment"># Slack Block Kit 알림</span>
+│
+└── <span class="folder">08_airflow_dags/</span>                   <span class="comment"># ⑦ 운영 자동화</span>
+    ├── <span class="file">dag_daily_metrics.py</span>           <span class="comment"># 일간 지표 파이프라인</span>
+    ├── <span class="file">dag_data_quality.py</span>            <span class="comment"># 6시간 주기 품질 검증</span>
+    └── <span class="file">dag_tableau_refresh.py</span>         <span class="comment"># Tableau 데이터 갱신</span></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- ══════════════ FOOTER ══════════════ -->
+    <footer class="footer">
+        <div class="footer-text">
+            Built with ❤️ by DataOps Engineer — QuickPay DataOps Portfolio 2026
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/jiminnote/fintech-dataops_portfolio" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:contact@example.com" title="Email"><i class="fas fa-envelope"></i></a>
+        </div>
+    </footer>
+
+    <!-- Scroll to top -->
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script>
+        // ── Scroll animations ──
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ── Scroll to top button ──
+        window.addEventListener('scroll', () => {
+            document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 500);
+        });
+
+        // ── Active nav link ──
+        const sections = document.querySelectorAll('section[id]');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY + 100;
+            sections.forEach(section => {
+                const top = section.offsetTop;
+                const height = section.offsetHeight;
+                const id = section.getAttribute('id');
+                const link = document.querySelector(`.nav-links a[href="#${id}"]`);
+                if (link) {
+                    link.classList.toggle('active', scrollY >= top && scrollY < top + height);
+                }
+            });
+        });
+
+        // ── Mobile nav ──
+        const style = document.createElement('style');
+        style.textContent = `
+            @media (max-width: 768px) {
+                .nav-links.show-mobile {
+                    display: flex !important;
+                    flex-direction: column;
+                    position: absolute;
+                    top: 64px;
+                    left: 0;
+                    right: 0;
+                    background: rgba(15, 23, 42, 0.95);
+                    backdrop-filter: blur(20px);
+                    padding: 1rem;
+                    border-bottom: 1px solid var(--border);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
