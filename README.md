@@ -1,5 +1,7 @@
 # 🏦 핀테크 DataOps 포트폴리오 — "토스페이 클론" 데이터 운영 체계
 
+[https://jiminnote.github.io/fintech-dataops_portfolio/](https://jiminnote.github.io/fintech-dataops_portfolio/)
+
 > **가상의 핀테크 서비스 "QuickPay"**(송금·결제·충전)를 대상으로  
 > 서비스 로그 설계 → 지표 체계 정의 → 데이터 마트 구축 → 대시보드 시각화 → 품질 모니터링  
 > 까지 **DataOps 전 주기**를 구현한 포트폴리오 프로젝트입니다.
